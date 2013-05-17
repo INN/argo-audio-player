@@ -1,24 +1,24 @@
 <?php
 /**
  * @package Argo_Audio_Player
- * @version 1.0
+ * @version 1.1
  */
 /*
 Plugin Name: Argo Audio Player
 Plugin URI: https://github.com/argoproject/argo-audio-player
 Description: The Argo Audio Player Plugin.
 Author: Project Argo, Mission Data
-Version: 1.0
+Version: 1.1
 Author URI:
 License: GPLv2
 */
 
 /* The Argo Audio Player Plugin class - so we don't have function naming conflicts */
 class ArgoAudioPlayer {
-  
+
   /* Initialize the plugin */
   function init() {
-	
+
 	/**
 	 * Add the "audio" shortcode for use in posts
 	 * We call all other functions from within the argo_audio_shortcode function
@@ -54,12 +54,12 @@ class ArgoAudioPlayer {
 	/* Load up the SoundManager 2 javascript files into the footer */
 	echo "<script src='".plugins_url(null,__FILE__)."/js/sm.min.js'></script>";
 	echo "<script src='".plugins_url(null, __FILE__)."/js/sm.playlist.js'></script>";
-	
-	
+
+
 	/* Setup the SoundManager 2 swf directories*/
 	echo "<script>
 	soundManager.url = '".plugins_url(null,__FILE__)."/swf/';
-	
+
 	function setTheme(sTheme) {
 	  var o = document.getElementsByTagName('ul')[0];
 	  o.className = 'playlist'+(sTheme?' '+sTheme:'');
@@ -68,15 +68,15 @@ class ArgoAudioPlayer {
 	soundManager.onready(function() {
 	  // SM2 is ready to play audio!
 	});
-	
+
 	</script>";
-	
-  }  
+
+  }
 
   /*
    * DISABLE DEFAULT FUNCTIONALITY
    */
-  
+
   function disable_builtin_caption( $shcode, $html ) {
 	  return $html;
   }
@@ -84,7 +84,7 @@ class ArgoAudioPlayer {
   /*
    * END DISABLE DEFAULT FUNCTIONALITY
    */
-  
+
   /*
    * AUDIO EDITOR MARKUP CUSTOMIZATIONS
    */
@@ -96,10 +96,10 @@ class ArgoAudioPlayer {
 	  }
 	  $out .= sprintf( '<a href="%s" class="%s">%s</a>', $href, 'exclude', 'Download' );
 	  $out .= "</li></ul>";
-  
+
 	  return $out;
   }
-  
+
   /*
    * SHORTCODES
    */
@@ -110,32 +110,31 @@ class ArgoAudioPlayer {
 	  $html = ArgoAudioPlayer::argo_audio_editor_markup( $href, $title, $content );
 	  return $html;
   }
-  
+
   // construct shortcode for audio embeds
   function argo_audio_editor_shortcode( $html, $href, $title  ) {
 	  return sprintf( '[audio href="%s" title="%s"]Insert caption here[/audio]', $href, $title );
   }
   // construct shortcode for audio embeds
   function argo_audio_editor_media_gallery_shortcode( $html, $send_id, $attachment  ) {
-	$title = '';
-	$href = '';
-	if (preg_match("/\.mp3|\.ogg|\.mp4|\.wav|\.m4a/",$html)) {
-	  /* Get the title from the html */
-	  preg_match("/\>.+\</",$html,$title);
-	  $title = $title[0];
-	  $title = preg_replace("/\>|\</","",$title);
-	  $title = preg_replace("/_/"," ",$title);
-	  /* Get the url of the file from the html */
-	  preg_match("/\'.+\'/",$html,$href);
-	  $href = $href[0];
-	  $href = preg_replace("/\'/","",$href);
-	  return sprintf( '[audio href="%s" title="%s"]Insert caption here[/audio]', $href, $title );
-	} else {
-	  return;
-	  
-	}
-	
+		$title = '';
+		$href = '';
+		if (preg_match("/\.mp3|\.ogg|\.mp4|\.wav|\.m4a/",$html)) {
+		  /* Get the title from the html */
+		  preg_match("/\>.+\</",$html,$title);
+		  $title = $title[0];
+		  $title = preg_replace("/\>|\</","",$title);
+		  $title = preg_replace("/_/"," ",$title);
+		  /* Get the url of the file from the html */
+		  preg_match("/\'.+\'/",$html,$href);
+		  $href = $href[0];
+		  $href = preg_replace("/\'/","",$href);
+		  return sprintf( '[audio href="%s" title="%s"]Insert caption here[/audio]', $href, $title );
+		} else {
+		  return $html;
+		}
   }
+
   /*
    * ADMIN PRESENTATION CUSTOMIZATIONS
    */
@@ -147,8 +146,8 @@ class ArgoAudioPlayer {
   }
   // XXX: it does more harm than good to comment this out.
   //add_filter( 'media_upload_tabs', 'argo_tweak_upload_tabs', 12, 1 );
-  
-  
+
+
   /*
    * END ADMIN PRESENTATION CUSTOMIZATIONS
    */
